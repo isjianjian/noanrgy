@@ -1,8 +1,8 @@
 package io.renren.datasources;
 
 import io.renren.datasources.annotation.DataSource;
-import io.renren.modules.app.entity.UserEntity;
-import io.renren.modules.app.service.UserService;
+import io.renren.modules.core.entity.UserEntity;
+import io.renren.modules.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

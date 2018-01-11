@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.detro:ghostdriver:unknown">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/detro/ghostdriver/unknown/ghostdriver-unknown.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/detro/ghostdriver/unknown/ghostdriver-unknown-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/detro/ghostdriver/unknown/ghostdriver-unknown-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

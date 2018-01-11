@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.core.dao.CommentsDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.core.entity.CommentsEntity" id="commentsMap">
+        <result property="coid" column="coid"/>
+        <result property="cid" column="cid"/>
+        <result property="created" column="created"/>
+        <result property="author" column="author"/>
+        <result property="authorId" column="author_id"/>
+        <result property="ownerId" column="owner_id"/>
+        <result property="mail" column="mail"/>
+        <result property="url" column="url"/>
+        <result property="ip" column="ip"/>
+        <result property="agent" column="agent"/>
+        <result property="content" column="content"/>
+        <result property="type" column="type"/>
+        <result property="status" column="status"/>
+        <result property="parent" column="parent"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.modules.core.entity.CommentsEntity">
+		select * from t_comments where coid = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.modules.core.entity.CommentsEntity">
+		select * from t_comments
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by coid desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from t_comments 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.modules.core.entity.CommentsEntity" useGeneratedKeys="true" keyProperty="coid">
+		insert into t_comments
+		(
+			`cid`, 
+			`created`, 
+			`author`, 
+			`author_id`, 
+			`owner_id`, 
+			`mail`, 
+			`url`, 
+			`ip`, 
+			`agent`, 
+			`content`, 
+			`type`, 
+			`status`, 
+			`parent`
+		)
+		values
+		(
+			#{cid}, 
+			#{created}, 
+			#{author}, 
+			#{authorId}, 
+			#{ownerId}, 
+			#{mail}, 
+			#{url}, 
+			#{ip}, 
+			#{agent}, 
+			#{content}, 
+			#{type}, 
+			#{status}, 
+			#{parent}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.modules.core.entity.CommentsEntity">
+		update t_comments 
+		<set>
+			<if test="cid != null">`cid` = #{cid}, </if>
+			<if test="created != null">`created` = #{created}, </if>
+			<if test="author != null">`author` = #{author}, </if>
+			<if test="authorId != null">`author_id` = #{authorId}, </if>
+			<if test="ownerId != null">`owner_id` = #{ownerId}, </if>
+			<if test="mail != null">`mail` = #{mail}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="ip != null">`ip` = #{ip}, </if>
+			<if test="agent != null">`agent` = #{agent}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="parent != null">`parent` = #{parent}</if>
+		</set>
+		where coid = #{coid}
+	</update>
+	
+	<delete id="delete">
+		delete from t_comments where coid = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_comments where coid in 
+		<foreach item="coid" collection="array" open="(" separator="," close=")">
+			#{coid}
+		</foreach>
+	</delete>
+
+</mapper>

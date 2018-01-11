@@ -4,7 +4,7 @@ package io.renren.modules.app.controller;
 import io.renren.common.utils.R;
 import io.renren.modules.app.annotation.Login;
 import io.renren.modules.app.annotation.LoginUser;
-import io.renren.modules.app.entity.UserEntity;
+import io.renren.modules.core.entity.UserEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;

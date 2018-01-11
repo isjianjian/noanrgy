@@ -2,7 +2,7 @@ package io.renren;
 
 
 import io.renren.datasources.DataSourceTestService;
-import io.renren.modules.app.entity.UserEntity;
+import io.renren.modules.core.entity.UserEntity;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;

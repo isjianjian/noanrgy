@@ -3,7 +3,7 @@ package io.renren.modules.app.controller;
 
 import io.renren.common.utils.R;
 import io.renren.common.validator.Assert;
-import io.renren.modules.app.service.UserService;
+import io.renren.modules.core.service.UserService;
 import io.renren.modules.app.utils.JwtUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,12 +36,12 @@ public class ApiLoginController {
      */
     @PostMapping("login")
     @ApiOperation("登录")
-    public R login(String mobile, String password){
-        Assert.isBlank(mobile, "手机号不能为空");
+    public R login(String account, String password){
+        Assert.isBlank(account, "账户不能为空");
         Assert.isBlank(password, "密码不能为空");
 
         //用户登录
-        long userId = userService.login(mobile, password);
+        long userId = userService.login(account, password);
 
         //生成token
         String token = jwtUtils.generateToken(userId);

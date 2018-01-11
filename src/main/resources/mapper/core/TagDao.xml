@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.core.dao.TagDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.core.entity.TagEntity" id="tagMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="desc" column="desc"/>
+        <result property="authorId" column="author_id"/>
+        <result property="icon" column="icon"/>
+        <result property="type" column="type"/>
+        <result property="classifyId" column="classify_id"/>
+        <result property="created" column="created"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.modules.core.entity.TagEntity">
+		select * from t_tag where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.modules.core.entity.TagEntity">
+		select * from t_tag
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from t_tag 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.modules.core.entity.TagEntity">
+		insert into t_tag
+		(
+			`id`, 
+			`name`, 
+			`desc`, 
+			`author_id`, 
+			`icon`, 
+			`type`, 
+			`classify_id`, 
+			`created`
+		)
+		values
+		(
+			#{id}, 
+			#{name}, 
+			#{desc}, 
+			#{authorId}, 
+			#{icon}, 
+			#{type}, 
+			#{classifyId}, 
+			#{created}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.modules.core.entity.TagEntity">
+		update t_tag 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="desc != null">`desc` = #{desc}, </if>
+			<if test="authorId != null">`author_id` = #{authorId}, </if>
+			<if test="icon != null">`icon` = #{icon}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="classifyId != null">`classify_id` = #{classifyId}, </if>
+			<if test="created != null">`created` = #{created}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from t_tag where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_tag where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

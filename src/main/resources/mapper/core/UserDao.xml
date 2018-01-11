@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.core.dao.UserDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.core.entity.UserEntity" id="userMap">
+        <result property="userId" column="user_id"/>
+        <result property="nikename" column="nikename"/>
+        <result property="mobile" column="mobile"/>
+        <result property="password" column="password"/>
+        <result property="createTime" column="create_time"/>
+        <result property="email" column="email"/>
+        <result property="account" column="account"/>
+        <result property="headImg" column="head_img"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.modules.core.entity.UserEntity">
+		select * from t_user where user_id = #{value}
+	</select>
+
+	<select id="login" resultType="io.renren.modules.core.entity.UserEntity">
+		select * from t_user where account = #{value} OR email = #{value} OR mobile = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.modules.core.entity.UserEntity">
+		select * from t_user
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by user_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from t_user 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.modules.core.entity.UserEntity" useGeneratedKeys="true" keyProperty="userId">
+		insert into t_user
+		(
+			`nikename`, 
+			`mobile`, 
+			`password`, 
+			`create_time`, 
+			`email`, 
+			`account`, 
+			`head_img`
+		)
+		values
+		(
+			#{nikename}, 
+			#{mobile}, 
+			#{password}, 
+			#{createTime}, 
+			#{email}, 
+			#{account}, 
+			#{headImg}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.modules.core.entity.UserEntity">
+		update t_user 
+		<set>
+			<if test="nikename != null">`nikename` = #{nikename}, </if>
+			<if test="mobile != null">`mobile` = #{mobile}, </if>
+			<if test="password != null">`password` = #{password}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="email != null">`email` = #{email}, </if>
+			<if test="account != null">`account` = #{account}, </if>
+			<if test="headImg != null">`head_img` = #{headImg}</if>
+		</set>
+		where user_id = #{userId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_user where user_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_user where user_id in 
+		<foreach item="userId" collection="array" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
+	</delete>
+
+</mapper>

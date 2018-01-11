@@ -1,9 +1,9 @@
 package io.renren.modules.app.controller;
 
-
 import io.renren.common.utils.R;
 import io.renren.common.validator.Assert;
-import io.renren.modules.app.service.UserService;
+import io.renren.modules.core.entity.UserEntity;
+import io.renren.modules.core.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +26,13 @@ public class ApiRegisterController {
 
     @PostMapping("register")
     @ApiOperation("注册")
-    public R register(String mobile, String password){
-        Assert.isBlank(mobile, "手机号不能为空");
+    public R register(String email, String password){
+        Assert.isBlank(email, "手机号不能为空");
         Assert.isBlank(password, "密码不能为空");
-
-        userService.save(mobile, password);
-
+        UserEntity user = new UserEntity();
+        user.setEmail(email);
+        user.setPassword(password);
+        userService.save(user);
         return R.ok();
     }
 }
