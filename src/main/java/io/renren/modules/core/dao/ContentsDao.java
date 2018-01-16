@@ -4,6 +4,9 @@ import io.renren.modules.core.entity.ContentsEntity;
 import io.renren.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 
  * 
@@ -13,5 +16,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ContentsDao extends BaseDao<ContentsEntity> {
-	
+    List<ContentsEntity> search(Map<String, Object> map);
+    int searchTotal(Map<String, Object> map);
 }

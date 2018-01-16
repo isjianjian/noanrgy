@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.core.dao.CollectDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.core.entity.CollectEntity" id="collectMap">
+        <result property="id" column="id"/>
+        <result property="tags" column="tags"/>
+        <result property="uid" column="uid"/>
+        <result property="created" column="created"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.modules.core.entity.CollectEntity">
+		select * from t_collect where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.modules.core.entity.CollectEntity">
+		select * from t_collect
+		<where>
+			<if test="uid != null">
+				AND uid =  #{uid}
+			</if>
+			<if test="tid != null">
+				AND tags =  #{tid}
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from t_collect
+		<where>
+			<if test="uid != null">
+				AND uid =  #{uid}
+			</if>
+			<if test="tid != null">
+				AND tags =  #{tid}
+			</if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.modules.core.entity.CollectEntity">
+		insert into t_collect
+		(
+			`id`, 
+			`tags`, 
+			`uid`, 
+			`created`
+		)
+		values
+		(
+			#{id}, 
+			#{tags}, 
+			#{uid}, 
+			#{created}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.modules.core.entity.CollectEntity">
+		update t_collect 
+		<set>
+			<if test="tags != null">`tags` = #{tags}, </if>
+			<if test="uid != null">`uid` = #{uid}, </if>
+			<if test="created != null">`created` = #{created}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from t_collect where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_collect where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

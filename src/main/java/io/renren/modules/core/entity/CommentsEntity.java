@@ -2,6 +2,7 @@ package io.renren.modules.core.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -43,6 +44,7 @@ public class CommentsEntity implements Serializable {
 	//父id
 	private Long parent;
 
+	private String puser;
 	/**
 	 * 设置：
 	 */
@@ -211,4 +213,12 @@ public class CommentsEntity implements Serializable {
 	public Long getParent() {
 		return parent;
 	}
+
+    public String getPuser() {
+        return puser;
+    }
+
+    public void setPuser(String puser) {
+        this.puser = puser;
+    }
 }

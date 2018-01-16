@@ -1,10 +1,7 @@
 package io.renren.modules.app.controller;
 
 import io.renren.common.exception.RRException;
-import io.renren.common.utils.Constant;
-import io.renren.common.utils.ContentsUtil;
-import io.renren.common.utils.R;
-import io.renren.common.utils.Types;
+import io.renren.common.utils.*;
 import io.renren.common.validator.Assert;
 import io.renren.modules.app.annotation.LoginUser;
 import io.renren.modules.core.entity.ContentsEntity;
@@ -13,12 +10,11 @@ import io.renren.modules.core.service.ContentsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -73,5 +69,18 @@ public class ApiContentsController {
         return R.ok();
     }
 
+    @GetMapping("dynamic")
+    @ApiOperation("更新文章")
+    public R dynamic(@LoginUser UserEntity user,@RequestParam Map<String, Object> params){
+        Query query = new Query(params);
+        query.put("att",user.getUserId());  // 查选关注者动态
+        query.put("collect",user.getUserId()); // 查询收藏动态
+        query.put("begin_time",WZDateUtil.getDayStart(new Date()));  // 当天开始时间
+        query.put("begin_time",WZDateUtil.getDayEnd(new Date()));  // 当天结束时间
+        List<ContentsEntity> contents = contentsService.search(query);
+        int total = contentsService.searchTotal(query);
+        PageUtils pageUtil = new PageUtils(contents, total, query.getLimit(), query.getPage());
+        return R.ok();
+    }
 
 }

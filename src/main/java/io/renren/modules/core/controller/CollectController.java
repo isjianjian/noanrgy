@@ -3,7 +3,6 @@ package io.renren.modules.core.controller;
 import java.util.List;
 import java.util.Map;
 
-import io.renren.modules.app.annotation.Login;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.renren.modules.core.entity.TagEntity;
-import io.renren.modules.core.service.TagService;
+import io.renren.modules.core.entity.CollectEntity;
+import io.renren.modules.core.service.CollectService;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.Query;
 import io.renren.common.utils.R;
@@ -26,26 +25,27 @@ import io.renren.common.utils.R;
  * 
  * @author wz
  * @email 798378318@qq.com
- * @date 2018-01-10 18:35:50
+ * @date 2018-01-12 15:44:04
  */
 @RestController
-@RequestMapping("/app/tag")
-public class TagController {
+@RequestMapping("/core/collect")
+public class CollectController {
 	@Autowired
-	private TagService tagService;
+	private CollectService collectService;
+	
 	/**
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	public R list( @RequestParam Map<String, Object> params){
+	@RequiresPermissions("core:collect:list")
+	public R list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 
-		List<TagEntity> tagList = tagService.queryList(query);
-
-		int total = tagService.queryTotal(query);
+		List<CollectEntity> collectList = collectService.queryList(query);
+		int total = collectService.queryTotal(query);
 		
-		PageUtils pageUtil = new PageUtils(tagList, total, query.getLimit(), query.getPage());
+		PageUtils pageUtil = new PageUtils(collectList, total, query.getLimit(), query.getPage());
 		
 		return R.ok().put("page", pageUtil);
 	}
@@ -55,20 +55,20 @@ public class TagController {
 	 * 信息
 	 */
 	@RequestMapping("/info/{id}")
-	@RequiresPermissions("core:tag:info")
+	@RequiresPermissions("core:collect:info")
 	public R info(@PathVariable("id") Long id){
-		TagEntity tag = tagService.queryObject(id);
+		CollectEntity collect = collectService.queryObject(id);
 		
-		return R.ok().put("tag", tag);
+		return R.ok().put("collect", collect);
 	}
 	
 	/**
 	 * 保存
 	 */
 	@RequestMapping("/save")
-	@RequiresPermissions("core:tag:save")
-	public R save(@RequestBody TagEntity tag){
-		tagService.save(tag);
+	@RequiresPermissions("core:collect:save")
+	public R save(@RequestBody CollectEntity collect){
+		collectService.save(collect);
 		
 		return R.ok();
 	}
@@ -77,9 +77,9 @@ public class TagController {
 	 * 修改
 	 */
 	@RequestMapping("/update")
-	@RequiresPermissions("core:tag:update")
-	public R update(@RequestBody TagEntity tag){
-		tagService.update(tag);
+	@RequiresPermissions("core:collect:update")
+	public R update(@RequestBody CollectEntity collect){
+		collectService.update(collect);
 		
 		return R.ok();
 	}
@@ -88,9 +88,9 @@ public class TagController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("core:tag:delete")
+	@RequiresPermissions("core:collect:delete")
 	public R delete(@RequestBody Long[] ids){
-		tagService.deleteBatch(ids);
+		collectService.deleteBatch(ids);
 		
 		return R.ok();
 	}

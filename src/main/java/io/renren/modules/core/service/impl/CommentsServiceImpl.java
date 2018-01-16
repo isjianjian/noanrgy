@@ -1,5 +1,7 @@
 package io.renren.modules.core.service.impl;
 
+import io.renren.common.utils.DateUtils;
+import io.renren.common.validator.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,8 @@ public class CommentsServiceImpl implements CommentsService {
 	
 	@Override
 	public void save(CommentsEntity comments){
+		Assert.isNull(comments.getContent(),"评论不能为空");
+		comments.setCreated(DateUtils.nowUnix());
 		commentsDao.save(comments);
 	}
 	

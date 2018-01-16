@@ -31,6 +31,12 @@ public class TagEntity implements Serializable {
 	//
 	private Integer created;
 
+
+	public static final String SVG = "svg";
+
+	public static final String URL = "url";
+
+
 	/**
 	 * 设置：
 	 */

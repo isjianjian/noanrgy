@@ -27,4 +27,8 @@ public interface ContentsService {
 	void delete(Long cid);
 	
 	void deleteBatch(Long[] cids);
+
+    List<ContentsEntity> search(Map<String, Object> map);
+
+	int searchTotal(Map<String, Object> map);
 }

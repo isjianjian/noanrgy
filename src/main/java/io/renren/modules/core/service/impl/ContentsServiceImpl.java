@@ -5,6 +5,8 @@ import com.vdurmont.emoji.EmojiParser;
 import io.renren.common.exception.RRException;
 import io.renren.common.utils.Constant;
 import io.renren.common.utils.DateUtils;
+import io.renren.common.utils.PageUtils;
+import io.renren.common.utils.Query;
 import io.renren.common.validator.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -90,5 +92,15 @@ public class ContentsServiceImpl implements ContentsService {
 	public void deleteBatch(Long[] cids){
 		contentsDao.deleteBatch(cids);
 	}
-	
+	//搜索文章
+	@Override
+	public List<ContentsEntity> search(Map<String, Object> map){
+		return contentsDao.search(map);
+	}
+
+	@Override
+	public int searchTotal(Map<String, Object> map){
+		return contentsDao.searchTotal(map);
+	}
+
 }

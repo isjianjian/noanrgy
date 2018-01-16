@@ -24,6 +24,9 @@
         <result property="thumbimg" column="thumbImg"/>
     </resultMap>
 
+
+
+
 	<select id="queryObject" resultType="io.renren.modules.core.entity.ContentsEntity">
 		select * from t_contents where cid = #{value}
 	</select>
@@ -42,9 +45,97 @@
 			limit #{offset}, #{limit}
 		</if>
 	</select>
-	
+
+	<select id="search" resultType="io.renren.modules.core.entity.ContentsEntity">
+		select
+		`id`,
+		`title`,
+		`slug`,
+		`created`,
+		`modified`,
+		`author_id`,
+		`type`,
+		`status`,
+		`tags`,
+		`categories`,
+		`hits`,
+		`comments_num`,
+		`allow_comment`,
+		`allow_ping`,
+		`allow_feed`,
+		`thumbImg`
+		from t_contents
+		<where>
+			<if test="tags != null">
+				AND tags = #{tags}
+			</if>
+			<if test="author_id != null" >
+				AND author_id = #{author_id}
+			</if>
+			<if test="collect != null" >
+				AND author_id IN
+					(SELECT tags FROM t_collect WHERE uid = #{collect})
+			</if>
+			<if test="att != null" >
+				AND author_id IN
+					(SELECT att_uid FROM t_att WHERE uid = #{att})
+			</if>
+			<if test="begin_time != null" >
+				AND modified > #{begin_time}
+			</if>
+			<if test="end_time != null" >
+				AND modified &lt; #{end_time}
+			</if>
+			<if test="keyword !=- null">
+				AND (title LIKE '%${keyword}%' OR content LIKE '%${keyword}%')
+			</if>
+		</where>
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by created desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
  	<select id="queryTotal" resultType="int">
 		select count(*) from t_contents 
+	</select>
+
+	<select id="searchTotal" resultType="io.renren.modules.core.entity.ContentsEntity">
+		select
+		count(*)
+		from t_contents
+		<where>
+			<if test="tags != null">
+				AND tags = #{tags}
+			</if>
+			<if test="author_id != null" >
+				AND author_id = #{author_id}
+			</if>
+			<if test="collect != null" >
+				AND author_id IN
+				(SELECT tags FROM t_collect WHERE uid = #{collect})
+			</if>
+			<if test="att != null" >
+				AND author_id IN
+				(SELECT att_uid FROM t_att WHERE uid = #{att})
+			</if>
+			<if test="begin_time != null" >
+				AND modified > #{begin_time}
+			</if>
+			<if test="end_time != null" >
+				AND modified &lt; #{end_time}
+			</if>
+			<if test="keyword !=- null">
+				AND (title LIKE '%${keyword}%' OR content LIKE '%${keyword}%')
+			</if>
+		</where>
 	</select>
 	 
 	<insert id="save" parameterType="io.renren.modules.core.entity.ContentsEntity" useGeneratedKeys="true" keyProperty="cid">

@@ -21,6 +21,11 @@
 
 	<select id="queryList" resultType="io.renren.modules.core.entity.TagEntity">
 		select * from t_tag
+		<where>
+			<if test="uid != null">
+				AND id IN (SELECT tags FROM t_collect WHERE uid = #{uid})
+			</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -35,7 +40,12 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from t_tag 
+		select count(*) from t_tag
+		<where>
+			<if test="uid != null">
+				AND id IN (SELECT tags FROM t_collect WHERE uid = #{uid})
+			</if>
+		</where>
 	</select>
 	 
 	<insert id="save" parameterType="io.renren.modules.core.entity.TagEntity">
