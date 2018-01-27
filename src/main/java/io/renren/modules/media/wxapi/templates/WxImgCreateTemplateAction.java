@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @Slf4j
 public class WxImgCreateTemplateAction {
-
+    private final static String TEMP_DIR = "/tmp/wx/";
     private final static String TEMP_FILE = "/tmp/wx/templates.data";
 
     private List<WxImgCreateTemplateCell> cellList = new CopyOnWriteArrayList<>();
@@ -51,6 +51,10 @@ public class WxImgCreateTemplateAction {
         scheduleExecutorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
+                File dir = new File(TEMP_DIR);
+                if (!dir.exists()){
+                    dir.mkdirs();
+                }
                 File file = new File(TEMP_FILE);
                 if (lastModify >= file.lastModified()) {
                     return;

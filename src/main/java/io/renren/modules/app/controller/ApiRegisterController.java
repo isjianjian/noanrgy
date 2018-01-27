@@ -27,7 +27,7 @@ public class ApiRegisterController {
     @PostMapping("register")
     @ApiOperation("注册")
     public R register(String email, String password){
-        Assert.isBlank(email, "手机号不能为空");
+        Assert.isBlank(email, "手机号或邮箱不能为空");
         Assert.isBlank(password, "密码不能为空");
         UserEntity user = new UserEntity();
         user.setEmail(email);

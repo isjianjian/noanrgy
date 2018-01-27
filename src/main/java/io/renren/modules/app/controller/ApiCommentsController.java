@@ -9,6 +9,7 @@ import io.renren.modules.core.entity.CommentsEntity;
 import io.renren.modules.core.entity.UserEntity;
 import io.renren.modules.core.service.CommentsService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class ApiCommentsController {
 	/**
 	 * 列表
 	 */
+	@ApiOperation("评论列表")
 	@RequestMapping("/list")
 	public R list(@RequestParam Map<String, Object> params){
 		//查询列表数据
@@ -48,6 +50,7 @@ public class ApiCommentsController {
 	/**
 	 * 保存
 	 */
+	@ApiOperation("增加评论")
 	@RequestMapping("/save")
 	public R save(@LoginUser UserEntity user, @RequestBody CommentsEntity comments){
 		comments.setOwnerId(user.getUserId());
@@ -58,6 +61,7 @@ public class ApiCommentsController {
 	/**
 	 * 删除
 	 */
+	@ApiOperation("删除评论")
 	@RequestMapping("/delete")
 	public R delete(@LoginUser UserEntity user,Long coid){
 		CommentsEntity comments = commentsService.queryObject(coid);

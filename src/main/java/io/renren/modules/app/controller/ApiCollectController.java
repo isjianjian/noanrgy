@@ -9,6 +9,7 @@ import io.renren.modules.core.entity.CollectEntity;
 import io.renren.modules.core.entity.UserEntity;
 import io.renren.modules.core.service.CollectService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class ApiCollectController {
 	/**
 	 * 列表
 	 */
+	@ApiOperation("收藏列表")
 	@RequestMapping("/list")
 	public R list(@LoginUser UserEntity user,@RequestParam Map<String, Object> params){
 		//查询列表数据
@@ -51,6 +53,7 @@ public class ApiCollectController {
 	/**
 	 * 信息
 	 */
+	@ApiOperation("详细信息")
 	@RequestMapping("/info/{id}")
 	public R info(@PathVariable("id") Long id){
 		CollectEntity collect = collectService.queryObject(id);
@@ -61,6 +64,7 @@ public class ApiCollectController {
 	/**
 	 * 保存
 	 */
+	@ApiOperation("收藏")
 	@RequestMapping("/collect")
 	public R save(@LoginUser UserEntity user,Long tid){
 		if (collectService.isCollect(user.getUserId(),tid)){
@@ -76,6 +80,7 @@ public class ApiCollectController {
 	/**
 	 * 删除
 	 */
+	@ApiOperation("取消收藏")
 	@RequestMapping("/uncollect")
 	public R delete(@LoginUser UserEntity user,@RequestBody Long tid){
 		collectService.unCollect(user.getUserId(),tid);

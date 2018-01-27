@@ -6,6 +6,8 @@ import io.renren.modules.app.annotation.LoginUser;
 import io.renren.modules.core.entity.TagEntity;
 import io.renren.modules.core.entity.UserEntity;
 import io.renren.modules.core.service.TagService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/core/tag")
+@Api("文章标签")
 public class ApiTagController {
 	@Autowired
 	private TagService tagService;
@@ -28,6 +31,7 @@ public class ApiTagController {
 	/**
 	 * 列表
 	 */
+	@ApiOperation("标签列表")
 	@RequestMapping("/list")
 	public R list(@LoginUser UserEntity user,@RequestParam Map<String, Object> params){
 		//查询列表数据
@@ -46,6 +50,7 @@ public class ApiTagController {
 	/**
 	 * 信息
 	 */
+    @ApiOperation("详细信息")
 	@RequestMapping("/info/{id}")
 	public R info(@PathVariable("id") Long id){
 		TagEntity tag = tagService.queryObject(id);
@@ -55,6 +60,8 @@ public class ApiTagController {
 	/**
 	 * 保存
 	 */
+	@ApiOperation("增加标签")
+
 	@RequestMapping("/save")
 	public R save(@RequestBody TagEntity tag){
 		tagService.save(tag);
